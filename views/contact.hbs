@@ -1,17 +1,24 @@
 <form method="post">
+
+{{#each errorMessages}}
+<div class="alert alert-danger">
+  {{this.msg}}
+</div>
+{{/each}}
+
     <div class="row">
     <div class="col">
-        <label for="exampleInputName1">Name</label>
+        <label for="name">Name</label>
       <br>
     </br>
-        <input type="text" class="form-control" id="exampleInputName1" placeholder="Your Name">
+        <input type="text"  name="name" class="form-control" id="name" placeholder="Your Name" value={{name}}>
        </div>
     <div class="col">
       
       <label for="exampleInputEmail1">Email ID</label>
       <br>
     </br>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <input type="email"  name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value={{email}}>
    
     </div>
   </div>
@@ -24,7 +31,7 @@
     <label for="exampleFormControlTextarea1">Message</label>
     <br>
     <br>
-    <textarea class="form-control" placeholder="Enter Your Message Here !!" id="exampleFormControlTextarea1" rows="3"></textarea>
+    <textarea name="message" class="form-control" value={{message}} placeholder="Enter Your Message Here !!" id="exampleFormControlTextarea1" rows="3"></textarea>
   </div>
   <br>
 <center>
