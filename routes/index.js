@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var nodemailer=require('nodemailer');
+var config=require('../config');
+var transporter=nodemailer.createTransport(config.mailer);
 var { body, validationResult} = require('express-validator');
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -27,7 +30,34 @@ if(errors) {
   });
 }
 else
-  {res.render('thanks',{title:'CodeMeet'});}
+  {
+    
+    var mailOptions={
+      from:'CodeMeet <noreply@codemeet.com>',
+      to:'utkarshup562@gmail.com',
+      subject: 'You got a new message from website',
+      text: req.body.message
+    };
+    transporter.sendMail(mailOptions,function(error,info){
+      if(error){
+        return console.log(error);
+      }
+      res.render('thanks',{title:'CodeMeet'});
+    });
+    
+    
+    
+    
+    }
+});
+
+router.get('/login',function(req,res,next)
+{
+    res.render('/login',{title:'Login - CodeMeet'});
+});
+router.get('/register',function(req,res,next)
+{
+    res.render('/register',{title:'Register - CodeMeet'});
 });
 
 module.exports = router;
