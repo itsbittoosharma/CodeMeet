@@ -7,7 +7,7 @@ var userSchema=new mongoose.Schema({
         unique:true,
         required:true
     },
-    email:{
+    name:{
         type:String,
         
         required:true

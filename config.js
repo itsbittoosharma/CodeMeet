@@ -1,4 +1,4 @@
-'use strice'
+'use strict'
 
 module.exports={
     mailer:{
