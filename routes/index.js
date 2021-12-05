@@ -51,13 +51,6 @@ else
     }
 });
 
-router.get('/login',function(req,res,next)
-{
-    res.render('login',{title:'Login - CodeMeet'});
-});
-router.get('/register',function(req,res,next)
-{
-    res.render('register',{title:'Register - CodeMeet'});
-});
+
 
 module.exports = router;
