@@ -2,8 +2,15 @@ var express = require('express');
 var router = express.Router();
 var passport = require('passport');
 
+function forwardAuthenticated (req, res, next) {
+  if (!req.isAuthenticated()) {
+    return next()
+  }
+  res.redirect('/');  // if auth    
+};
+
 router.route('/login')
-  .get(function(req, res, next) {
+  .get(forwardAuthenticated,(req, res, next)=> {
     res.render('login', { title: 'Login your account'});
   })
   .post(passport.authenticate('local', {
@@ -13,7 +20,7 @@ router.route('/login')
   });
 
 router.route('/register')
-  .get(function(req, res, next) {
+  .get(forwardAuthenticated,(req, res, next)=>  {
     res.render('register', { title: 'Register a new account'});
   })
   .post(function(req, res, next) {

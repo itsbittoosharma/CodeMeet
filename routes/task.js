@@ -25,7 +25,7 @@ function ensureAuthenticated (req, res, next) {
     res.redirect('/login') // if not auth
   };
 
-  forwardAuthenticated: (req, res, next) => {
+ function forwardAuthenticated (req, res, next) {
     if (!req.isAuthenticated()) {
       return next()
     }
