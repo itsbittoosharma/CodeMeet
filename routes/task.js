@@ -45,7 +45,7 @@ router.get('/task/:id',ensureAuthenticated, (req, res) => {
 else if(data) {
 
 
-    res.render('task',{data:data});
+    res.render('task',{data:data, roomId:data.id});
 
 }
 else res.redirect('/');
