@@ -1,24 +1,35 @@
 'use strict';
 
-var socketIO=require('socket.io');
+var socketIO = require('socket.io');
+var ot = require('ot');
+var roomList = {};
 
-module.exports=function(server){
-    var io=socketIO(server);
-    io.on('connection',function(socket){
+module.exports = function(server) {
+  
+  var str = 'This is a Markdown heading \n\n';
 
-socket.on('joinRoom',function(data){
-socket.room=data.room;
-socket.join(data.room);
-
-});
-
-
-        socket.on('chatMessage',function(data){
-            io.to(socket.room).emit('chatMessage',data);
+  var io = socketIO(server);
+  io.on('connection', function(socket) {
+    socket.on('joinRoom', function(data) {
+      if (!roomList[data.room]) {
+        var socketIOServer = new ot.EditorSocketIOServer(str, [], data.room, function(socket, cb) {
+          cb(true);
         });
+        roomList[data.room] = socketIOServer;
+      }
+      roomList[data.room].addClient(socket);
+      roomList[data.room].setName(socket, data.username);
 
-        socket.on('disconnect',function(){
-            socket.leave(socket.room);
-        });
-    })
+      socket.room = data.room;
+      socket.join(data.room);
+    });
+
+    socket.on('chatMessage', function(data) {
+      io.to(socket.room).emit('chatMessage', data);
+    });
+
+    socket.on('disconnect', function() {
+      socket.leave(socket.room);
+    });
+  })
 }

@@ -47,19 +47,33 @@ CHAT ROOM
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/codemirror.min.js" integrity="sha512-4DlmQ+aBOfYTZ3uzRKCDXdyL7y8IlopnVChhXG0pRFgyvhwONVQW3JX8e5DYoXUNr3evQpLZz7S3O1XxMH4WKA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.64.0/mode/javascript/javascript.min.js" integrity="sha512-DJ/Flq7rxJDDhgkO49H/rmidX44jmxWot/ku3c+XXEF9XFal78KIpu7w6jEaQhK4jli1U3/yOH+Rp3cIIEYFPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/plugins/ot/ot.js"></script>
 <script src="/socket.io/socket.io.js"></script>
 
 
 
-
 <script>
+ 
+var EditorClient = ot.EditorClient;
+var SocketIOAdapter = ot.SocketIOAdapter;
+var CodeMirrorAdapter = ot.CodeMirrorAdapter;
   var socket = io.connect('http://localhost:3000');
   var editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
     lineNumbers: true,
     theme: "monokai"
   });
 
+var cmClient;
+  function init(str, revision, clients, serverAdapter) {
+    editor.setValue(str);
+    cmClient = window.cmClient = new EditorClient(
+      revision, clients, serverAdapter, new CodeMirrorAdapter(editor)
+    );
+  };
 
+socket.on('doc', function(obj) {
+    init(obj.str, obj.revision, obj.clients, new SocketIOAdapter(socket));
+  });
 
  var username = $("#chatbox-username").val();
  // if(username === "") {
@@ -67,8 +81,8 @@ CHAT ROOM
  //   username = "User" + userId;
 //    $("#chatbox-username").text(username);
  // };
-var roomId=$('#roomId').val();
-socket.emit('joinRoom',{room:roomId});
+var roomId = $('#roomId').val();
+  socket.emit('joinRoom', {room: roomId, username: username});
 
 
   var userMessage = function(name, text) {
