@@ -20,18 +20,19 @@ router.get('/contact',function(req,res,next){
   req.checkBody('email','Invalid email').isEmail();
   req.checkBody('message','Empty message').notEmpty();
   var errors=req.validationErrors();
-if(errors) {
-  res.render('contact',{
+if(errors)
+	{
+  res.render('contact',
+	  {
     title:'CodeMeet',
     name: req.body.name,
     email:req.body.email,
     message: req.body.message,
     errorMessages: errors 
-  });
-}
+  	});
+	}
 else
   {
-    
     var mailOptions={
       from:'CodeMeet <noreply@codemeet.com>',
       to:'utkarshup562@gmail.com',
@@ -44,13 +45,8 @@ else
       }
       res.render('thanks',{title:'CodeMeet'});
     });
-    
-    
-    
-    
+     
     }
 });
-
-
 
 module.exports = router;
